@@ -54,6 +54,12 @@ func Timebox(timeout time.Duration, fn interface{}, arguments ...interface{}) (r
 
 	returnChan := make(chan []reflect.Value)
 	go func() {
+		defer func() {
+			if e := recover(); e != nil {
+				err = fmt.Errorf("%v", e)
+				returnChan <- nil
+			}
+		}()
 		returnChan <- v.Call(args)
 	}()
 
@@ -70,5 +76,5 @@ func Timebox(timeout time.Duration, fn interface{}, arguments ...interface{}) (r
 		}
 	}
 
-	return nil, nil
+	return nil, err
 }
