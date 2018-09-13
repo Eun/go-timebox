@@ -13,7 +13,7 @@ func ExampleTimebox() {
 	timebox.Timebox(time.Second, time.Sleep, time.Minute)
 }
 
-func ExampleDetail() {
+func ExampleTimebox_inlineFunction() {
 	result, err := timebox.Timebox(time.Second, func() (int, error) {
 		// Some heavy operation
 		return 42, nil
@@ -29,7 +29,7 @@ func ExampleDetail() {
 	fmt.Printf("The answer is %d\n", result[0].(int))
 }
 
-func ExampleCheckCancelInsideTheFunction() {
+func ExampleTimebox_checkCancelInsideTheFunction() {
 	canceled := abool.New()
 	_, err := timebox.Timebox(time.Second, func() (int, error) {
 		time.Sleep(time.Second)

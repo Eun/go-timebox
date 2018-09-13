@@ -55,6 +55,5 @@ func TestTimeout(t *testing.T) {
 	start := time.Now()
 	_, err := Timebox(time.Second, time.Sleep, time.Second*5)
 	require.IsType(t, TimeoutError{}, err)
-	dur := time.Now().Sub(start)
-	require.True(t, dur.Seconds() < 2)
+	require.True(t, time.Since(start).Seconds() < 2)
 }
