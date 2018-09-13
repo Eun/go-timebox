@@ -2,7 +2,7 @@ language: go
 go:
   - 1.9
 
-go_import_path: github.com/Eun/goremovelines
+go_import_path: github.com/Eun/go-timebox
 
 before_install:
   - go get -t -v ./...
