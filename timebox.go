@@ -33,6 +33,7 @@ func IsTimeoutError(err error) bool {
 }
 
 // Timebox timeboxes a function to a specific timeout, if the timeout exceeds the err will be an instance of TimeoutError
+// Specify 0 as timeout to wait infinitely
 func Timebox(timeout time.Duration, fn interface{}, arguments ...interface{}) (returns []interface{}, err error) {
 	defer func() {
 		if e := recover(); e != nil {
@@ -63,8 +64,13 @@ func Timebox(timeout time.Duration, fn interface{}, arguments ...interface{}) (r
 		returnChan <- v.Call(args)
 	}()
 
+	var timeChan <-chan time.Time
+	if timeout > 0 {
+		timeChan = time.After(timeout)
+	}
+
 	select {
-	case <-time.After(timeout):
+	case <-timeChan:
 		return nil, TimeoutError{}
 	case returnValues := <-returnChan:
 		if size := len(returnValues); size > 0 {
